@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <component :is="$route.meta.layout || 'div'">
     <RouterView />
-  </div>
+  </component>
 </template>
 
 <script setup lang="ts">
