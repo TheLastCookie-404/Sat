@@ -18,7 +18,7 @@
     </svg>
   </button>
   <QrcodeVue
-    :value="'qrCode'"
+    :value="qrCode"
     :size="150"
     level="H"
     render-as="svg"
