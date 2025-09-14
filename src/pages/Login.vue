@@ -18,20 +18,33 @@
         <button @click="() => login()" class="btn btn-neutral mt-4">
           Login
         </button>
+        <p class="label">
+          <span>Don`t have an account?</span>
+          <router-link to="/register" class="text-success"
+            >Register</router-link
+          >
+        </p>
       </fieldset>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { ref } from "vue";
+  import { ref, onMounted } from "vue";
   import { useLocalStorage } from "@vueuse/core";
-  import axios from "axios";
   import { router } from "@/router/router";
+  import axios from "axios";
 
   const userIin = ref<string>();
   const userPassword = ref<string>();
   const accessToken = useLocalStorage<string>("AccessToken", "");
+  const minAccesTokenLength = 50;
+
+  onMounted(() => {
+    if (accessToken.value.length > minAccesTokenLength) {
+      router.push("/profile");
+    }
+  });
 
   function login() {
     const requestConfig = {};

@@ -9,7 +9,7 @@
         @detect="onDetect"
         @camera-on="onCameraReady" />
     </div>
-    <p class="error">{{ error }}</p>
+    <p class="font-bold text-error">{{ error }}</p>
 
     <p class="decode-result">
       Last result: <b>{{ result }}</b>
@@ -18,12 +18,25 @@
 </template>
 
 <script setup>
-  import { ref, computed } from "vue";
+  import { ref, computed, watch } from "vue";
   import { QrcodeStream } from "vue-qrcode-reader";
 
   /*** detection handling ***/
 
   const result = ref("");
+
+  const props = defineProps({
+    onReadCallback: {
+      type: Function,
+      required: false,
+      default: () => {},
+    },
+  });
+
+  watch(result, (result) => {
+    result = JSON.parse(result);
+    props.onReadCallback(result[0]);
+  });
 
   function onDetect(detectedCodes) {
     console.log(detectedCodes);
@@ -169,15 +182,3 @@
     error.value += errorMessages[err.name] ?? "Unkown error";
   }
 </script>
-
-<style scoped>
-  .error {
-    font-weight: bold;
-    color: red;
-  }
-  .barcode-format-checkbox {
-    margin-right: 10px;
-    white-space: nowrap;
-    display: inline-block;
-  }
-</style>

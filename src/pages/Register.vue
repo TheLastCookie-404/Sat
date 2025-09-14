@@ -28,6 +28,10 @@
         <button @click="() => login()" class="btn btn-neutral mt-4">
           Register
         </button>
+        <p class="label">
+          <span>Already have an account?</span>
+          <router-link to="/login" class="text-success">Login</router-link>
+        </p>
       </fieldset>
     </div>
   </div>

@@ -3,9 +3,9 @@ import DefaultLayout from "@/layouts/default.vue";
 import Register from "@/pages/Register.vue";
 import Login from "@/pages/Login.vue";
 import Profile from "@/pages/Profile.vue";
-// @ts-ignore
-import ReadQr from "@/pages/ReadQr.vue";
+import ReadQrcode from "@/pages/ReadQrcode.vue";
 import Transaction from "@/pages/Transaction.vue";
+import NotificationTest from "@/pages/NotificationTest.vue";
 
 export const routes = [
   {
@@ -21,11 +21,17 @@ export const routes = [
     path: "/profile",
   },
   {
-    component: ReadQr,
-    path: "/readqr",
+    component: ReadQrcode,
+    path: "/",
+    // path: "/readqr",
   },
   {
     component: Transaction,
-    path: "/transaction",
+    path: "/transaction/",
+    children: [{ component: Transaction, path: ":iin" }],
+  },
+  {
+    component: NotificationTest,
+    path: "/notification",
   },
 ];

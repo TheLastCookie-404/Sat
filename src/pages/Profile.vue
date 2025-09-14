@@ -33,7 +33,9 @@
   import QrcodeVue from "qrcode.vue";
 
   const message = ref<string>();
-  const qrCode = shallowRef<string>("");
+  const qrCode = shallowRef<string>(
+    "https://darling-fun-krill.ngrok-free.app/transaction"
+  );
   const accessToken = useLocalStorage<string>("AccessToken", "");
 
   const requestConfig = {
@@ -63,7 +65,7 @@
       .get("https://bolash.uniong.ru/api/v1/iin", requestConfig)
       .then((response) => {
         console.log(response);
-        qrCode.value = response.data.message;
+        qrCode.value = `${qrCode.value}/${response.data.message}`;
       })
       .catch((error) => {
         console.error(error);
