@@ -25,12 +25,12 @@
           class="input"
           placeholder="Пароль" />
 
-        <button @click="() => login()" class="btn btn-neutral mt-4">
+        <button @click="() => register()" class="btn btn-neutral mt-4">
           Register
         </button>
         <p class="label">
           <span>Already have an account?</span>
-          <router-link to="/login" class="text-success">Login</router-link>
+          <RouterLink to="/login" class="text-success">Login</RouterLink>
         </p>
       </fieldset>
     </div>
@@ -38,15 +38,25 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from "vue";
+  import { ref, onMounted } from "vue";
+  import { useLocalStorage } from "@vueuse/core";
+  import { router } from "@/router/router";
+  import { RouterLink } from "vue-router";
   import axios from "axios";
 
   const userName = ref<string>();
   const userLastName = ref<string>();
   const userIin = ref<string>();
   const userPassword = ref<string>();
+  const accessToken = useLocalStorage<string>("AccessToken", "");
 
-  function login() {
+  onMounted(() => {
+    if (accessToken.value) {
+      router.push("/profile");
+    }
+  });
+
+  function register() {
     const requestConfig = {};
 
     axios
@@ -62,6 +72,29 @@
       )
       .then((response) => {
         console.log(response);
+        login();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  function login() {
+    const requestConfig = {};
+
+    axios
+      .post(
+        "https://bolash.uniong.ru/api/v1/login",
+        {
+          iin: userIin.value,
+          password: userPassword.value,
+        },
+        requestConfig
+      )
+      .then((response) => {
+        console.log(response);
+        accessToken.value = response.data["access_token"];
+        router.push("/profile");
       })
       .catch((error) => {
         console.error(error);

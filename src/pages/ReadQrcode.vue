@@ -5,7 +5,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from "vue";
   import ReadQr from "@/components/ReadQr.vue";
 
   function redirect(url: string) {

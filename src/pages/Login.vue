@@ -20,9 +20,7 @@
         </button>
         <p class="label">
           <span>Don`t have an account?</span>
-          <router-link to="/register" class="text-success"
-            >Register</router-link
-          >
+          <RouterLink to="/register" class="text-success">Register</RouterLink>
         </p>
       </fieldset>
     </div>
@@ -38,10 +36,9 @@
   const userIin = ref<string>();
   const userPassword = ref<string>();
   const accessToken = useLocalStorage<string>("AccessToken", "");
-  const minAccesTokenLength = 50;
 
   onMounted(() => {
-    if (accessToken.value.length > minAccesTokenLength) {
+    if (accessToken.value) {
       router.push("/profile");
     }
   });
@@ -67,6 +64,4 @@
         console.error(error);
       });
   }
-
-  function profileRedirect() {}
 </script>

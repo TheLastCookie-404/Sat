@@ -1,41 +1,77 @@
 <template>
-  <div>{{ message }}</div>
-  <button class="btn" @click="() => getIin()">
-    <span>Предъявить</span>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24">
-      <g fill="none" fill-rule="evenodd" clip-rule="evenodd">
-        <path
-          fill="#8fbffa"
-          d="M2 1H1v8h2V3h6V1zm0 22H1v-8h2v6h6v2zM23 1v8h-2V3h-6V1zm0 21v1h-8v-2h6v-6h2z" />
-        <path
-          fill="#2859c5"
-          d="M5 10v1h6V5H5zm4-1H7V7h2zm4 1v1h6V5h-6zm4-1h-2V7h2zM5 19v-6h6v6zm2-2h2v-2H7zm6 .5V19h6v-2h-4v-4h-2zm4-4.5v2h2v-2z" />
-      </g>
-    </svg>
-  </button>
-  <QrcodeVue
-    :value="qrCode"
-    :size="150"
-    level="H"
-    render-as="svg"
-    class="m-5" />
+  <div v-if="accessToken || true" class="size-full p-3 space-y-3 flex flex-col">
+    <div class="collapse collapse-arrow bg-base-200 shadow-sm">
+      <input type="checkbox" />
+      <div class="collapse-title font-semibold">
+        How do I create an account?
+      </div>
+      <div class="collapse-content text-sm">
+        Click the "Sign Up" button in the top right corner and follow the
+        registration process.
+      </div>
+    </div>
+
+    <div class="card card-sm card-border shadow-sm bg-base-200">
+      <div class="card-body gap-1">
+        <!-- <div class="card-title">
+          <div>Следующий урок:</div>
+          <div class="text-success">Математика</div>
+        </div> -->
+        <div class="text-lg">
+          <p class="space-x-2">
+            <span class="font-medium">ИИН</span>
+            <span class="text-base-content/75">** ** ** *** ***</span>
+          </p>
+          <p class="space-x-2">
+            <span class="font-medium">Имя</span>
+            <span class="text-base-content/75">Василий</span>
+          </p>
+          <p class="space-x-2">
+            <span class="font-medium">Фамилия</span>
+            <span class="text-base-content/75">Чикичипеньтьев</span>
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- <button class="btn btn-block font-normal">Предъявить Мой QR</button> -->
+
+    <div class="w-full flex justify-center mt-auto p-3">
+      <button class="btn size-fit btn-circle btn-info">
+        <svg
+          class="size-12 p-1.5"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24">
+          <path
+            fill="currentColor"
+            d="M5 11h4c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v4c0 1.1.9 2 2 2m0-6h4v4H5zm0 16h4c1.1 0 2-.9 2-2v-4c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v4c0 1.1.9 2 2 2m0-6h4v4H5zm8-10v4c0 1.1.9 2 2 2h4c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2m6 4h-4V5h4zm2 11.5v-1c0-.28-.22-.5-.5-.5h-1c-.28 0-.5.22-.5.5v1c0 .28.22.5.5.5h1c.28 0 .5-.22.5-.5m-8-7v1c0 .28.22.5.5.5h1c.28 0 .5-.22.5-.5v-1c0-.28-.22-.5-.5-.5h-1c-.28 0-.5.22-.5.5m3.5 1.5h-1c-.28 0-.5.22-.5.5v1c0 .28.22.5.5.5h1c.28 0 .5-.22.5-.5v-1c0-.28-.22-.5-.5-.5M13 17.5v1c0 .28.22.5.5.5h1c.28 0 .5-.22.5-.5v-1c0-.28-.22-.5-.5-.5h-1c-.28 0-.5.22-.5.5m2.5 3.5h1c.28 0 .5-.22.5-.5v-1c0-.28-.22-.5-.5-.5h-1c-.28 0-.5.22-.5.5v1c0 .28.22.5.5.5m2-2h1c.28 0 .5-.22.5-.5v-1c0-.28-.22-.5-.5-.5h-1c-.28 0-.5.22-.5.5v1c0 .28.22.5.5.5m1-6h-1c-.28 0-.5.22-.5.5v1c0 .28.22.5.5.5h1c.28 0 .5-.22.5-.5v-1c0-.28-.22-.5-.5-.5m1 4h1c.28 0 .5-.22.5-.5v-1c0-.28-.22-.5-.5-.5h-1c-.28 0-.5.22-.5.5v1c0 .28.22.5.5.5" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- <div class="w-fit">
+      <QrcodeVue
+        :value="qrCode"
+        :size="150"
+        level="H"
+        render-as="svg"
+        class="m-5" />
+      <div
+        v-if="!qrCode"
+        class="loading loading-dots loading-md text-base-content/50"></div>
+    </div> -->
+  </div>
 </template>
 
 <script lang="ts" setup>
-  import { ref, onBeforeMount, shallowRef } from "vue";
+  import { onBeforeMount, shallowRef } from "vue";
   import { useLocalStorage } from "@vueuse/core";
+  import { router } from "@/router/router";
   import axios from "axios";
 
   import QrcodeVue from "qrcode.vue";
 
-  const message = ref<string>();
-  const qrCode = shallowRef<string>(
-    "https://darling-fun-krill.ngrok-free.app/transaction"
-  );
+  const qrCode = shallowRef<string>();
+
   const accessToken = useLocalStorage<string>("AccessToken", "");
 
   const requestConfig = {
@@ -45,27 +81,19 @@
   };
 
   onBeforeMount(() => {
-    test();
-  });
+    if (!accessToken.value) {
+      router.push("/login");
+    }
 
-  function test() {
-    axios
-      .get("https://bolash.uniong.ru/api/v1", requestConfig)
-      .then((response) => {
-        console.log(response);
-        message.value = response.data.message;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
+    getIin();
+  });
 
   function getIin() {
     axios
-      .get("https://bolash.uniong.ru/api/v1/iin", requestConfig)
+      .get("https://bolash.uniong.ru/api/v1/whoami", requestConfig)
       .then((response) => {
         console.log(response);
-        qrCode.value = `${qrCode.value}/${response.data.message}`;
+        // qrCode.value = `https://darling-fun-krill.ngrok-free.app/transaction/${response.data.message}`;
       })
       .catch((error) => {
         console.error(error);

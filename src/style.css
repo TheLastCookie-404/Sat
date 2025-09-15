@@ -2,3 +2,12 @@
 @plugin "daisyui" {
   themes: wireframe --default;
 }
+
+@font-face {
+  font-family: SFPro;
+  src: url("./assets/fonts/SF-Pro-Rounded-Regular.ttf");
+}
+
+@theme {
+  --font-body: SFPro, sans-serif;
+}
