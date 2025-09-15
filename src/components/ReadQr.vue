@@ -1,19 +1,34 @@
 <template>
-  <div>
-    <div>
-      <qrcode-stream
-        :constraints="selectedConstraints"
-        :track="trackFunctionSelected.value"
-        :formats="selectedBarcodeFormats"
-        @error="onError"
-        @detect="onDetect"
-        @camera-on="onCameraReady" />
+  <div class="relative">
+    <div
+      class="absolute z-50 left-0 top-0 size-full flex items-center justify-center">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        class="size-full">
+        <path
+          class="stroke-white/50"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="0.2"
+          d="M16 4h2a2 2 0 0 1 2 2v2m0 8v2a2 2 0 0 1-2 2h-2m-8 0H6a2 2 0 0 1-2-2v-2m0-8V6a2 2 0 0 1 2-2h2" />
+      </svg>
     </div>
-    <p class="font-bold text-error">{{ error }}</p>
+    <qrcode-stream
+      :constraints="selectedConstraints"
+      :track="trackFunctionSelected.value"
+      :formats="selectedBarcodeFormats"
+      @error="onError"
+      @detect="onDetect"
+      @camera-on="onCameraReady" />
+    <!-- <p class="font-bold text-error">{{ error }}</p>
 
     <p class="decode-result">
       Last result: <b>{{ result }}</b>
-    </p>
+    </p> -->
   </div>
 </template>
 

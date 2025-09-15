@@ -1,5 +1,5 @@
 <template>
-  <div class="font-body">
+  <div>
     <component
       :is="$route.meta.layout || 'div'"
       class="fixed top-0 left-0 z-10 size-full">
