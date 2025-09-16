@@ -146,7 +146,7 @@
       .get("https://bolash.uniong.ru/api/v1/whoami", requestConfig)
       .then((response) => {
         console.log(response);
-        qrUrl.value = `https://58b8413b109f.ngrok-free.app/transaction/${response.data.iin}`;
+        qrUrl.value = `https://satyp.netlify.app/transaction/${response.data.iin}`;
         userIin.value = response.data["iin"];
         userName.value = response.data["first_name"];
         userLastName.value = response.data["last_name"];
