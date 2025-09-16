@@ -27,7 +27,8 @@
           placeholder="KZT" />
 
         <button @click="() => sendRequest()" class="btn btn-neutral mt-4">
-          Подтвердить
+          <span v-if="!isTransactionLoading">Подтвердить</span>
+          <span v-else class="loading loading-dots loading-md"></span>
         </button>
       </fieldset>
     </div>
@@ -49,6 +50,7 @@
   const iin: string = route.params.iin as string;
   const finalIin = ref<string>();
   const total = ref<number>();
+  const isTransactionLoading = ref<boolean>(false);
 
   const summ = ref<Number>();
 
@@ -60,16 +62,30 @@
   });
 
   async function sendRequest() {
+    const requestConfig = {
+      headers: {
+        Authorization: `Bearer ${accessToken.value}`,
+      },
+    };
+
+    isTransactionLoading.value = true;
+
     await axios
-      .post("https://bolash.uniong.ru/api/v1/transaction", {
-        iin: iin ?? finalIin.value,
-        total: total.value,
-      })
+      .post(
+        "https://bolash.uniong.ru/api/v1/transaction",
+        {
+          iin: iin ?? finalIin.value,
+          total: total.value,
+        },
+        requestConfig
+      )
       .then((response) => {
         console.log(response);
+        isTransactionLoading.value = false;
       })
       .catch((error) => {
         console.error(error);
+        isTransactionLoading.value = false;
       });
   }
 </script>

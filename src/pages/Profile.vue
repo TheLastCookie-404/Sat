@@ -17,7 +17,18 @@
       </div>
     </TopDrawer>
 
-    <div class="size-full px-3 py-10 flex flex-col relative overflow-hidden">
+    <div
+      class="h-24 mt-7 m-3 rounded-4xl object-cover bg-[url(https://moneyman.ru/wp-content/uploads/2020/05/Visa-Cash.jpg)]">
+      <div class="flex items-center size-full p-5">
+        <div class="w-full text-base-100 text-xl font-bold flex justify-around">
+          <div class="w-full">Кэшбэк</div>
+          <div class="w-full text-center">{{ `${userCashback ?? 0} Б` }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="size-full px-3 pb-10 pt-5 flex flex-col relative overflow-hidden">
       <Transition>
         <div
           v-if="isDrawerOpen"
@@ -70,16 +81,16 @@
       <div class="card card-sm card-border border-base-300 shadow-sm">
         <div class="card-body gap-1">
           <div class="text-lg">
-            <div class="space-x-2 flex">
+            <!-- <div class="space-x-2 flex">
               <div class="w-2/5 font-medium text-green-600">Кэшбэк</div>
               <div class="w-full text-base-content/75 text-center">
                 {{ userCashback }}
               </div>
-            </div>
+            </div> -->
             <div class="space-x-2 flex">
               <div class="w-2/5 font-medium text-yellow-500">Налог</div>
               <div class="w-full text-base-content/75 text-center">
-                {{ userTax }}
+                <span>{{ userTax }} т</span>
               </div>
             </div>
           </div>

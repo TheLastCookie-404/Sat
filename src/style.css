@@ -10,4 +10,5 @@
 
 @theme {
   --default-font-family: SFPro, sans-serif;
+  --bg-green-img: url("./assets/img/image.png");
 }
