@@ -3,7 +3,7 @@
     <div class="w-fit m-auto">
       <fieldset
         class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
-        <legend class="fieldset-legend">Register</legend>
+        <legend class="fieldset-legend">Регистрация</legend>
 
         <label class="label">Имя</label>
         <input v-model="userName" type="text" class="input" placeholder="Имя" />
@@ -15,8 +15,8 @@
           class="input"
           placeholder="Фамилия" />
 
-        <label class="label">Иин</label>
-        <input v-model="userIin" type="text" class="input" placeholder="Иин" />
+        <label class="label">ИИН</label>
+        <input v-model="userIin" type="text" class="input" placeholder="ИИН" />
 
         <label class="label">Пароль</label>
         <input
@@ -26,11 +26,12 @@
           placeholder="Пароль" />
 
         <button @click="() => register()" class="btn btn-neutral mt-4">
-          Register
+          <span v-if="!isRegisterLoading">Зарегистрироваться</span>
+          <span v-else class="loading loading-dots loading-md"></span>
         </button>
         <p class="label">
-          <span>Already have an account?</span>
-          <RouterLink to="/login" class="text-success">Login</RouterLink>
+          <span>У вас уже есть аккаунт?</span>
+          <RouterLink to="/login" class="text-success">Войти</RouterLink>
         </p>
       </fieldset>
     </div>
@@ -48,6 +49,7 @@
   const userLastName = ref<string>();
   const userIin = ref<string>();
   const userPassword = ref<string>();
+  const isRegisterLoading = ref<boolean>();
   const accessToken = useLocalStorage<string>("AccessToken", "");
 
   onMounted(() => {
@@ -56,10 +58,12 @@
     }
   });
 
-  function register() {
+  async function register() {
     const requestConfig = {};
 
-    axios
+    isRegisterLoading.value = true;
+
+    await axios
       .post(
         "https://bolash.uniong.ru/api/v1/signup",
         {
@@ -72,17 +76,19 @@
       )
       .then((response) => {
         console.log(response);
+        isRegisterLoading.value = true;
         login();
       })
       .catch((error) => {
         console.error(error);
+        isRegisterLoading.value = false;
       });
   }
 
-  function login() {
+  async function login() {
     const requestConfig = {};
 
-    axios
+    await axios
       .post(
         "https://bolash.uniong.ru/api/v1/login",
         {

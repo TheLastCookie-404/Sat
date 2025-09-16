@@ -1,42 +1,34 @@
 <template>
   <div>
-    <Header linkLabel="Go Back" link="/profile" />
+    <div class="h-5"></div>
+    <Header linkLabel="Назад" link="/profile" />
     <!-- <form>
       <input class="input" v-model="summ" type="number" />
       <button class="submit" @click.prevent="() => sendRequest()"></button>
     </form> -->
     <div class="p-3 space-y-3">
-      <div class="card card-sm card-border bg-base-200 border-base-300">
-        <div class="card-body gap-1">
-          <!-- <div class="card-title">
-            <div>Следующий урок:</div>
-            <div class="text-success">Математика</div>
-          </div> -->
-          <div>
-            <p class="space-x-2 text-lg">
-              <span class="font-medium">Получатель</span>
-            </p>
-            <p class="space-x-2 text-base-content/75">
-              <span class="font-medium">ИИН</span>
-              <span>** ** ** *** ***</span>
-            </p>
-            <p class="space-x-2 text-base-content/75">
-              <span class="font-medium">Имя</span>
-              <span>Василий</span>
-            </p>
-            <p class="space-x-2 text-base-content/75">
-              <span class="font-medium">Фамилия</span>
-              <span>Чикичипеньтьев</span>
-            </p>
-          </div>
-        </div>
-      </div>
       <fieldset
         class="fieldset bg-base-200 border-base-300 rounded-box w-full border p-4">
+        <legend class="fieldset-legend">ИИН получателя</legend>
+        <input
+          v-model="finalIin"
+          type="text"
+          class="input w-full"
+          placeholder="XX-XX-XX-XXX-XXX" />
+      </fieldset>
+      <fieldset
+        class="fieldset bg-base-200 border-base-300 rounded-box w-full border p-4">
+        <legend class="fieldset-legend">Перевод</legend>
         <label class="label">Сумма перевода</label>
-        <input type="number" class="input" placeholder="KZT" />
+        <input
+          v-model="total"
+          type="number"
+          class="input w-full"
+          placeholder="KZT" />
 
-        <button class="btn btn-neutral mt-4">Login</button>
+        <button @click="() => sendRequest()" class="btn btn-neutral mt-4">
+          Подтвердить
+        </button>
       </fieldset>
     </div>
     {{ summ }}
@@ -44,20 +36,35 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from "vue";
+  import { ref, onMounted } from "vue";
   import { useRoute } from "vue-router";
   import axios from "axios";
+  import { useLocalStorage } from "@vueuse/core";
+  import { router } from "@/router/router";
 
   import Header from "@/components/Header.vue";
 
+  const accessToken = useLocalStorage<string>("AccessToken", "");
   const route = useRoute();
-  const iin = route.params.iin;
+  const iin: string = route.params.iin as string;
+  const finalIin = ref<string>();
+  const total = ref<number>();
 
   const summ = ref<Number>();
 
-  function sendRequest() {
-    axios
-      .post("")
+  onMounted(() => {
+    if (!accessToken.value) {
+      router.push("/login");
+    }
+    finalIin.value = iin ?? "";
+  });
+
+  async function sendRequest() {
+    await axios
+      .post("https://bolash.uniong.ru/api/v1/transaction", {
+        iin: iin ?? finalIin.value,
+        total: total.value,
+      })
       .then((response) => {
         console.log(response);
       })
